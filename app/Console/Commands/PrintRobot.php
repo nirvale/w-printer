@@ -1,20 +1,36 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
-use Illuminate\Http\Request;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\ImagickEscposImage;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use Illuminate\Support\Facades\Log;
 
 
-class PrinterController extends Controller
+class PrintRobot extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'print';
 
-    public function endpointer()
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Imprime los tickets cuando son registrados en la API';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
       $response = Http::post(env('API_URL').'/printTickets/print', [
         'sucursal_id' => env('SUCURSAL_ID')
@@ -82,62 +98,5 @@ class PrinterController extends Controller
       }else {
           Log::info($responseCollect['message'] );
       }
-
-    }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
