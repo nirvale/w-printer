@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Mike42\Escpos\Printer;
-use Mike42\Escpos\ImagickEscposImage;
+use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 
 
@@ -68,9 +68,11 @@ class PrintRobot extends Command
         $connector = new NetworkPrintConnector($ipToPrint);
         $printer = new Printer($connector);
         try {
-            $pages = ImagickEscposImage::loadPdf($pdfTp);
+            $pagesImg = new \Spatie\PdfToImage\Pdf($pdfTp);
+            $pages = $pagesImg->saveAllPages(storage_path('app/public/tickets/'),$responseCollect[0]['datat']['Id'].'_');
             foreach ($pages as $page) {
-                $printer -> graphics($page);
+                $tux = EscposImage::load($page, false);
+                $printer -> graphics($tux);
             }
             $printer -> cut();
             $printer -> close();
