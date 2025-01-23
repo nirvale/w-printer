@@ -11,5 +11,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('print')
         ->everyTwoSeconds()
-        ->withoutOverlapping()
         ;
