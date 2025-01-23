@@ -10,8 +10,7 @@
         "barryvdh/laravel-dompdf": "^3.0",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
-        "mike42/escpos-php": "^2.2",
-        "spatie/pdf-to-image": "^3.1"
+        "mike42/escpos-php": "^2.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
