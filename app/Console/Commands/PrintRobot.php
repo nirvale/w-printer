@@ -60,9 +60,10 @@ class PrintRobot extends Command
             $items[] = new item($producto['Cantidad'],$producto['Nombre'],$producto['Precio']);
             $total += $producto["Cantidad"] * $producto["Precio"];
         }
-        $logo = EscposImage::load(public_path('/theme/img/brand/logob.png'));
+
 
         try {
+            $logo = EscposImage::load(public_path('/theme/img/brand/logob.png'));
             $responseIp = Http::get(env('API_URL').'/printTickets/ipprint', [
               'sucursal_id' => env('SUCURSAL_ID')
             ]);
