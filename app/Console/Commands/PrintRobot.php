@@ -122,7 +122,7 @@ class PrintRobot extends Command
               $printer -> close();
             }
             echo $e -> getMessage() . "\n";
-            Log::info('error de impresión: '. $e -> getMessage() . "\n" );
+            Log::info('error de impresión: '. $e  . "\n" );
             // return $e;
         } finally {
 
