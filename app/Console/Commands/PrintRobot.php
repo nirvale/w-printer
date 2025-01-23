@@ -111,20 +111,23 @@ class PrintRobot extends Command
             $printer -> cut();
             $printer -> pulse();
             $printer -> close();
+            Log::info('recibo impreso: '. $responseCollect[0]['datat']['Id'] );
             $respUpdate = Http::post(env('API_URL').'/printTickets/printed', [
               'archivo' => $responseCollect[0]['datat']['Id']
             ]);
+            Log::info('bd actualizada: '. $responseCollect[0]['datat']['Id'] );
         } catch (\Exception $e) {
             if (isset($printer)) {
               $printer -> close();
             }
             echo $e -> getMessage() . "\n";
+            Log::info('error de impresión: '. $e -> getMessage() . "\n" );
             // return $e;
         } finally {
 
         }
 
-        Log::info('recibo impreso: '. $responseCollect[0]['datat']['Id'] );
+
 
       }else {
         // Log::info($responseCollect['message'] );
