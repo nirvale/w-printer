@@ -42,18 +42,6 @@ class PrintRobot extends Command
 
       $responseCollect=$response->collect();
       if ($responseCollect['message']=='ok') {
-        $dataT = array(
-            'imagen'=> $path,
-            'Productos'=>$responseCollect[0]['datat']['Productos'],
-            'Id'=>$responseCollect[0]['datat']['Id'],
-            "Fecha"=>$responseCollect[0]['datat']['Fecha'],
-            "Cajero"=>$responseCollect[0]['datat']['Cajero'],
-            "Sucursal"=>$responseCollect[0]['datat']['Sucursal'],
-            "Sellos"=>$responseCollect[0]['datat']['Sellos'],
-            "Cupones"=>$responseCollect[0]['datat']['Cupones'],
-            "Apodo"=>$responseCollect[0]['datat']['Apodo'],
-            "Email"=>$responseCollect[0]['datat']['Email']
-        );
 
         $total = 0;
         $productos = $responseCollect[0]['datat']['Productos'];
