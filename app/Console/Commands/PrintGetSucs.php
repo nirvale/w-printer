@@ -41,7 +41,8 @@ class PrintGetSucs extends Command
       $optsn = [];
       $sucursales->forget('message');
       // dd($sucursales['message']);
-      Storage::put('sucursales.bat', 'REM Script para sucursales Autogenerado con laravel');
+      Storage::put('sucursales.bat', '@ECHO off')
+      Storage::append('REM Script para sucursales Autogenerado con laravel', '');
       foreach ($sucursales as $sucursal) {
         Storage::append('sucursales.bat', 'ECHO '. $opts[$i] . ' - '.$sucursal['nombre']);
         $preChoice = $preChoice.$opts[$i];
@@ -49,11 +50,11 @@ class PrintGetSucs extends Command
         $i++;
       }
       Storage::append('sucursales.bat', '');
-      Storage::append('sucursales.bat','CHOICE /C '. $preChoice.' /M "Seleccione su sucursal para iniciar la instalación".../N');
+      Storage::append('sucursales.bat','CHOICE /C '. $preChoice.' /M "Seleccione su sucursal para iniciar la instalacion..." /N');
       Storage::append('sucursales.bat', '');
       $j = $sucursales->count()-1;
       foreach ($sucursales->reverse() as $sucursal) {
-        Storage::append('sucursales.bat', 'IF ERRORLEVEL  '. $j+1 . ' GOTO SUCC'.$optsn[$j]);
+        Storage::append('sucursales.bat', 'IF ERRORLEVEL  '. $j+1 . ' GOTO SUC'.$optsn[$j]);
         $j--;
       }
       $i = 0;
