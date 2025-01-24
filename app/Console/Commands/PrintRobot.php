@@ -19,7 +19,7 @@ class PrintRobot extends Command
      *
      * @var string
      */
-    protected $signature = 'print';
+    protected $signature = 'print:ticket';
 
     /**
      * The console command description.
@@ -33,10 +33,13 @@ class PrintRobot extends Command
      */
     public function handle()
     {
-      $response = Http::post(env('API_URL').'/printTickets/print', [
+      $response = Http::withOptions([
+        'verify' => false,
+      ])
+      ->post(env('API_URL').'/api/printTickets/print', [
         'sucursal_id' => env('SUCURSAL_ID')
       ]);
-      $path = public_path('/theme/img/brand/logo.png');
+
       $responseCollect=$response->collect();
       if ($responseCollect['message']=='ok') {
         $dataT = array(
@@ -51,9 +54,7 @@ class PrintRobot extends Command
             "Apodo"=>$responseCollect[0]['datat']['Apodo'],
             "Email"=>$responseCollect[0]['datat']['Email']
         );
-        $pdf = PDF::loadView('print.ticket', $dataT);
-        $pdf->setPaper('b7', 'portrait');
-        $pdf->save(storage_path('app/public/tickets/'.$responseCollect[0]['datat']['Id'] .'.pdf'));
+
         $total = 0;
         $productos = $responseCollect[0]['datat']['Productos'];
         foreach ($productos as $producto) {
@@ -64,7 +65,10 @@ class PrintRobot extends Command
 
         try {
             $logo = EscposImage::load(public_path('/theme/img/brand/logob.png'));
-            $responseIp = Http::get(env('API_URL').'/printTickets/ipprint', [
+            $responseIp = Http::withOptions([
+              'verify' => false,
+            ])
+            ->get(env('API_URL').'/api/printTickets/ipprint', [
               'sucursal_id' => env('SUCURSAL_ID')
             ]);
             $responseIpCollect=$responseIp->collect();
@@ -113,7 +117,10 @@ class PrintRobot extends Command
             $printer -> pulse();
             $printer -> close();
             Log::info('recibo impreso: '. $responseCollect[0]['datat']['Id'] );
-            $respUpdate = Http::post(env('API_URL').'/printTickets/printed', [
+            $respUpdate = Http::withOptions([
+              'verify' => false,
+            ])
+            ->post(env('API_URL').'/api/printTickets/printed', [
               'archivo' => $responseCollect[0]['datat']['Id']
             ]);
             Log::info('bd actualizada: '. $responseCollect[0]['datat']['Id'] );
@@ -127,8 +134,6 @@ class PrintRobot extends Command
         } finally {
 
         }
-
-
 
       }else {
         // Log::info($responseCollect['message'] );

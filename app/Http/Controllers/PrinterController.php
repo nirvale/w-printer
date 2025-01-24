@@ -17,10 +17,13 @@ class PrinterController extends Controller
 
     public function endpointer()
     {
-      $response = Http::post(env('API_URL').'/printTickets/print', [
+      $response = Http::withOptions([
+        'verify' => false,
+      ])
+      ->post(env('API_URL').'/printTickets/print', [
         'sucursal_id' => env('SUCURSAL_ID')
       ]);
-      $path = public_path('/theme/img/brand/logo.png');
+
       $responseCollect=$response->collect();
       if ($responseCollect['message']=='ok') {
         $dataT = array(
@@ -35,19 +38,21 @@ class PrinterController extends Controller
             "Apodo"=>$responseCollect[0]['datat']['Apodo'],
             "Email"=>$responseCollect[0]['datat']['Email']
         );
-        $pdf = PDF::loadView('print.ticket', $dataT);
-        $pdf->setPaper('b7', 'portrait');
-        $pdf->save(storage_path('app/public/tickets/'.$responseCollect[0]['datat']['Id'] .'.pdf'));
+
         $total = 0;
         $productos = $responseCollect[0]['datat']['Productos'];
         foreach ($productos as $producto) {
             $items[] = new item($producto['Cantidad'],$producto['Nombre'],$producto['Precio']);
             $total += $producto["Cantidad"] * $producto["Precio"];
         }
-        $logo = EscposImage::load(public_path('/theme/img/brand/logob.png'));
+
 
         try {
-            $responseIp = Http::get(env('API_URL').'/printTickets/ipprint', [
+            $logo = EscposImage::load(public_path('/theme/img/brand/logob.png'));
+            $responseIp = Http::withOptions([
+              'verify' => false,
+            ])
+            ->get(env('API_URL').'/printTickets/ipprint', [
               'sucursal_id' => env('SUCURSAL_ID')
             ]);
             $responseIpCollect=$responseIp->collect();
@@ -95,25 +100,28 @@ class PrinterController extends Controller
             $printer -> cut();
             $printer -> pulse();
             $printer -> close();
-            $respUpdate = Http::post(env('API_URL').'/printTickets/printed', [
+            Log::info('recibo impreso: '. $responseCollect[0]['datat']['Id'] );
+            $respUpdate = Http::withOptions([
+              'verify' => false,
+            ])
+            ->post(env('API_URL').'/printTickets/printed', [
               'archivo' => $responseCollect[0]['datat']['Id']
             ]);
+            Log::info('bd actualizada: '. $responseCollect[0]['datat']['Id'] );
         } catch (\Exception $e) {
             if (isset($printer)) {
               $printer -> close();
             }
             echo $e -> getMessage() . "\n";
+            Log::info('error de impresión: '. $e  . "\n" );
             // return $e;
         } finally {
 
         }
 
-        Log::info('recibo impreso: '. $responseCollect[0]['datat']['Id'] );
-
       }else {
-        Log::info($responseCollect['message'] );
+        // Log::info($responseCollect['message'] );
       }
-
     }
     /**
      * Display a listing of the resource.
