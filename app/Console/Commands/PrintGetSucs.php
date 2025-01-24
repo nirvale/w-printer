@@ -41,7 +41,7 @@ class PrintGetSucs extends Command
       $optsn = [];
       $sucursales->forget('message');
       // dd($sucursales['message']);
-      Storage::put('sucursales.bat', '@ECHO off')
+      Storage::put('sucursales.bat', '@ECHO off');
       Storage::append('REM Script para sucursales Autogenerado con laravel', '');
       foreach ($sucursales as $sucursal) {
         Storage::append('sucursales.bat', 'ECHO '. $opts[$i] . ' - '.$sucursal['nombre']);
