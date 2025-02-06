@@ -63,7 +63,7 @@ class PrintGetSucs extends Command
         Storage::append('sucursales.bat', ':SUC'. $optsn[$i]);
         Storage::append('sucursales.bat', 'ECHO Usted selecciono: '. $sucursal['nombre']);
         Storage::append('sucursales.bat', 'SET SUCURSAL='. $sucursal['id']);
-        Storage::append('sucursales.bat', 'GOTO SETSUCURSAL']);
+        Storage::append('sucursales.bat', 'GOTO SETSUCURSAL');
         $i++;
       }
       echo "Lista de sucursales cargada con éxito... \n";
