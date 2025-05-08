@@ -39,11 +39,12 @@ class TestApi extends Command
         ]);
 
         $tesSuc=$response->collect();
-        if ($tesSuc['message']=='ok') {
+        if (isset($tesSuc['message']) && $tesSuc['message']=='ok') {
           Storage::put('sucapi.txt', '');
           echo "Resultado: API de sucursales en linea... \n";
         }else {
           echo "Resultado: API de sucursales fuera de linea... \n";
+          echo $response;
         }
 
         echo "Comprobando la conectividad con la API de tickets para imprimir... \n";
@@ -55,11 +56,12 @@ class TestApi extends Command
         ]);
 
         $tesSuc=$response->collect();
-        if ($tesSuc['message']=='No hay tickets que imprimir') {
+        if (isset($tesSuc['message']) && $tesSuc['message']=='No hay tickets que imprimir') {
           Storage::put('tikapi.txt', '');
           echo "Resultado: API de tickets para imprimir en linea... \n";
         }else {
           echo "Resultado: API de tickets para imprimir fuera de linea... \n";
+          echo $response;
         }
 
         echo "Comprobando la conectividad con la API de impresoras... \n";
@@ -71,11 +73,12 @@ class TestApi extends Command
         ]);
 
         $tesSuc=$response->collect();
-        if ($tesSuc['message']=='No existe la impresora') {
+        if (isset($tesSuc['message']) && $tesSuc['message']=='No existe la impresora') {
           Storage::put('printerapi.txt', '');
           echo "Resultado: API de impresoras en linea... \n";
         }else {
           echo "Resultado: API de impresoras fuera de linea... \n";
+          echo $response;
         }
 
         echo "Comprobando la conectividad con la API de update... \n";
@@ -87,11 +90,12 @@ class TestApi extends Command
         ]);
 
         $tesSuc=$response->collect();
-        if ($tesSuc['message']=='No existe el ticket') {
+        if (isset($tesSuc['message']) && $tesSuc['message']=='No existe el ticket') {
           Storage::put('updaterapi.txt', '');
           echo "Resultado: API de update en linea... \n";
         }else {
           echo "Resultado: API de update fuera de linea... \n";
+          echo $response;
         }
 
 
